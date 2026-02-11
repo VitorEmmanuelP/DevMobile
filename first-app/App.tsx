@@ -3,19 +3,23 @@ import { useRef } from 'react';
 import { StyleSheet, Text, View , Image, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HomeScreen } from './src/screens/home';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+const queryClient = new QueryClient();
 
 function App() {
-
-
-
   return (
+        <QueryClientProvider client={queryClient}>
+
+
     <View style={styles.container}>
       <SafeAreaView>
         <HomeScreen />
       </SafeAreaView>
       <StatusBar style="auto" />
     </View>
+            </ QueryClientProvider>
+
   );
 }
 
