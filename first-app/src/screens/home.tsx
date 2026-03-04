@@ -1,23 +1,41 @@
-import { FlatList, Image, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from "react-native";
 import { usePokemonList } from "../domain/pokemon/use-cases/use-pokemon-list";
+import { PokemonCard } from "../components/pokemon-card";
 
 export function HomeScreen() {
 
-  const { data } = usePokemonList({ limit: 10, offset: 0 });
+  const { data, hasNextPage, fetchNextPage,  } = usePokemonList({ limit: 10, offset: 0 });
   const pokemons = data?.pages.flatMap((page) => page) ?? [];
 
-  console.log(pokemons);
+
+  function renderItem({ item }:  { item: any }) {
+    return (  
+      <PokemonCard name={item.name} imageUrl={item.sprites.front_default?.toString() || ''} />
+    )
+  }
+  function footerComponent() {
+    if (!hasNextPage) {
+      return null;
+    }
+    return (
+      <ActivityIndicator  />
+    );
+  }
 
   return (
-    <View>
+  <View style={{ flex: 1 }}>
       <FlatList
-      data={pokemons}
-        renderItem={({ item }) => (
-          <View>
-            <Text>{item.name}</Text>
-            <Image source={{ uri: item.sprites.front_default?.toString() }} style={{ width: 100, height: 100 }} />
-          </View>
-        )}
+        data={pokemons}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.name}
+        style={{ gap: 10 }}
+        ListFooterComponent={footerComponent}
+        onEndReached={() => {
+          if (hasNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
       />
     </View>
   );

@@ -11,10 +11,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <View style={styles.container}>
-        <SafeAreaView>
           <HomeScreen />
-        </SafeAreaView>
-        <StatusBar style="auto" />
       </View>
     </ QueryClientProvider>
   );
@@ -25,8 +22,6 @@ export default App
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'white',
   },
 });
