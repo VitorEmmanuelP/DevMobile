@@ -4,15 +4,22 @@ import { PokemonListRequest, PokemonListResponse } from "./pokemon-types";
 async function fetchListPokemons(request: PokemonListRequest): Promise<PokemonListResponse> {
 
     const requests: Promise<PokemonListResponse>[] = [];
+    const startId = request.offset + 1;
 
-    for (let i = request.offset; i < request.offset + request.limit; i++) {
+    for (let i = startId; i < startId + request.limit; i++) {
         requests.push(pokemonApi.fetchPokemons({ id: i }));
     }
-    
-    const responses = await Promise.all(requests);
-    const pokemons = responses.flat();
+    try {
+        const responses = await Promise.all(requests);
+        console.log("responses", responses);
 
-    return pokemons;
+        const pokemons = responses.flat();
+        
+        return pokemons;
+    } catch (error) {
+        console.error("Erro ao buscar pokémons", error);
+        throw error;
+    }
 
 }
 

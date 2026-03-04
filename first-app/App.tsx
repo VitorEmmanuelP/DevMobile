@@ -9,17 +9,14 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-        <QueryClientProvider client={queryClient}>
-
-
-    <View style={styles.container}>
-      <SafeAreaView>
-        <HomeScreen />
-      </SafeAreaView>
-      <StatusBar style="auto" />
-    </View>
-            </ QueryClientProvider>
-
+    <QueryClientProvider client={queryClient}>
+      <View style={styles.container}>
+        <SafeAreaView>
+          <HomeScreen />
+        </SafeAreaView>
+        <StatusBar style="auto" />
+      </View>
+    </ QueryClientProvider>
   );
 }
 
