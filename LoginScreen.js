@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../config/index';
+import { auth } from '../config/firebaseConfig';
 
-export function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
+  // Estados para controlar o Modal de feedback
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
@@ -20,7 +21,8 @@ export function LoginScreen({ navigation }) {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigation.replace('Home'); 
-    } catch (error: any) {
+    } catch (error) {
+      // Tratamento de erros de login
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         setModalMessage('Usuário ou senha incorretos. Verifique seus dados.');
       } else {
@@ -62,6 +64,7 @@ export function LoginScreen({ navigation }) {
         <Text style={styles.registerButtonText}>Não tem acesso? Criar conta</Text>
       </TouchableOpacity>
 
+      {/* COMPONENTE MODAL DE ERRO */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -82,6 +85,7 @@ export function LoginScreen({ navigation }) {
           </View>
         </View>
       </Modal>
+
     </View>
   );
 }
@@ -129,6 +133,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
+  // Estilos do Modal
   modalBackground: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
