@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; 
 import { NavigationContainer } from '@react-navigation/native'; 
+import { LoginScreen } from '../../screens/login';
 
 const Stack = createNativeStackNavigator(); 
 
@@ -11,7 +12,7 @@ export function StackNavigator(){
             headerShown: false,
           }} 
         > 
-          <Stack.Screen name="FADE" > 
+          <Stack.Screen component={LoginScreen} name="Login" /> 
         </Stack.Navigator>           
         </NavigationContainer>
     )
