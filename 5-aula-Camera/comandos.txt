@@ -1,0 +1,7 @@
+npx create-expo-app exCamera --template blank
+
+cd exCamera
+
+npx expo install expo-camera
+
+npx expo start --tunnel
