@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-  View,
   Text,
   TextInput,
   TouchableOpacity,
@@ -11,9 +10,9 @@ import {
   ScrollView,
 } from 'react-native';
 import { collection, addDoc } from 'firebase/firestore';
-import { db, auth } from '../src/config/firebase';
+import { db, auth } from '../../config/firebase';
 
-export function FormScreen({ navigation }) {
+export function FormScreen({ navigation }: any) {
   const [nomeCarro, setNomeCarro] = useState('');
   const [nomeCliente, setNomeCliente] = useState('');
   const [valorAluguel, setValorAluguel] = useState('');
@@ -70,7 +69,7 @@ export function FormScreen({ navigation }) {
         <Text style={styles.label}>Nome do Cliente</Text>
         <TextInput
           style={styles.input}
-          placeholder="Ex: João Silva"
+          placeholder="Ex: Joao Silva"
           value={nomeCliente}
           onChangeText={setNomeCliente}
         />

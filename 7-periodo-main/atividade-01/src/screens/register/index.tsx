@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-  View,
   Text,
   TextInput,
   TouchableOpacity,
@@ -10,9 +9,9 @@ import {
   Platform,
 } from 'react-native';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '../src/config/firebase';
+import { auth } from '../../config/firebase';
 
-export function RegisterScreen({ navigation }) {
+export function RegisterScreen({ navigation }: any) {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -23,6 +22,7 @@ export function RegisterScreen({ navigation }) {
       Alert.alert('Erro', 'Preencha todos os campos.');
       return;
     }
+
     if (senha.length < 6) {
       Alert.alert('Erro', 'A senha deve ter pelo menos 6 caracteres.');
       return;
@@ -35,12 +35,15 @@ export function RegisterScreen({ navigation }) {
       Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
       navigation.navigate('Login');
     } catch (error) {
+      const errorCode = (error as { code?: string }).code;
       let msg = 'Erro ao cadastrar.';
-      if (error.code === 'auth/email-already-in-use') {
-        msg = 'Este e-mail já está em uso.';
-      } else if (error.code === 'auth/invalid-email') {
-        msg = 'E-mail inválido.';
+
+      if (errorCode === 'auth/email-already-in-use') {
+        msg = 'Este e-mail ja esta em uso.';
+      } else if (errorCode === 'auth/invalid-email') {
+        msg = 'E-mail invalido.';
       }
+
       Alert.alert('Erro', msg);
     } finally {
       setLoading(false);
@@ -87,7 +90,7 @@ export function RegisterScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.link}>Já tem conta? Faça login</Text>
+        <Text style={styles.link}>Ja tem conta? Faca login</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );

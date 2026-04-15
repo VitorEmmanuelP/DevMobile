@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-  View,
   Text,
   TextInput,
   TouchableOpacity,
@@ -10,9 +9,9 @@ import {
   Platform,
 } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../src/config/firebase';
+import { auth } from '../../config/firebase';
 
-export function LoginScreen({ navigation }) {
+export function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,16 +27,19 @@ export function LoginScreen({ navigation }) {
       await signInWithEmailAndPassword(auth, email, senha);
       navigation.replace('Main');
     } catch (error) {
+      const errorCode = (error as { code?: string }).code;
       let msg = 'Erro ao fazer login.';
-      if (error.code === 'auth/user-not-found') {
-        msg = 'Usuário não encontrado.';
-      } else if (error.code === 'auth/wrong-password') {
+
+      if (errorCode === 'auth/user-not-found') {
+        msg = 'Usuario nao encontrado.';
+      } else if (errorCode === 'auth/wrong-password') {
         msg = 'Senha incorreta.';
-      } else if (error.code === 'auth/invalid-email') {
-        msg = 'E-mail inválido.';
-      } else if (error.code === 'auth/invalid-credential') {
-        msg = 'Credenciais inválidas. Verifique e-mail e senha.';
+      } else if (errorCode === 'auth/invalid-email') {
+        msg = 'E-mail invalido.';
+      } else if (errorCode === 'auth/invalid-credential') {
+        msg = 'Credenciais invalidas. Verifique e-mail e senha.';
       }
+
       Alert.alert('Erro', msg);
     } finally {
       setLoading(false);
@@ -78,7 +80,7 @@ export function LoginScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.link}>Não tem conta? Cadastre-se</Text>
+        <Text style={styles.link}>Nao tem conta? Cadastre-se</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
