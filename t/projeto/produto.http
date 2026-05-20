@@ -1,0 +1,33 @@
+# Definição de variáveis (ambiente "local" do REST Client)
+@base_url = INSERIR A URL DA SUA PORTA 8080 (PÚBLICA)
+### Inserir novo produto
+POST {{ base_url }}/api/produtos
+Content-Type: application/json
+
+{
+  "nome": "Notebook",
+  "quantidade": 10,
+  "valor": 3899.99
+}
+
+### Listar todos os produtos
+GET {{ base_url }}/api/produtos
+Accept: application/json
+
+### Buscar produto por ID
+GET {{ base_url }}/api/produtos/1
+Accept: application/json
+
+### Atualizar produto (PUT)
+PUT {{ base_url }}/api/produtos/1
+Content-Type: application/json
+
+{
+  "nome": "Notebook Pro",
+  "quantidade": 5,
+  "valor": 4299.99
+}
+
+### Remover produto (DELETE)
+DELETE {{ base_url }}/api/produtos/1
+Accept: */*

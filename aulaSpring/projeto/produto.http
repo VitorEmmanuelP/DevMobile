@@ -1,0 +1,33 @@
+# Definição de variáveis (ambiente "local" do REST Client)
+@base_url = https://laughing-umbrella-6x6w96gpjx9c6w4-8080.app.github.dev
+### Inserir novo produto
+POST {{ base_url }}/api/produtos
+Content-Type: application/json
+
+{
+  "nome": "Notebook",
+  "quantidade": 10,
+  "preco": 3899.99
+}
+
+### Listar todos os produtos
+GET {{ base_url }}/api/produtos
+Accept: application/json
+
+### Buscar produto por ID
+GET {{ base_url }}/api/produtos/1
+Accept: application/json
+
+### Atualizar produto (PUT)
+PUT {{ base_url }}/api/produtos/2
+Content-Type: application/json
+
+{
+  "nome": "Notebook Dell",
+  "quantidade": 5,
+  "preco": 4299.99
+}
+
+### Remover produto (DELETE)
+DELETE {{ base_url }}/api/produtos/1
+Accept: */*

@@ -1,0 +1,33 @@
+# Definição de variáveis (ambiente "local" do REST Client)
+@base_url = INSERIR A URL DA SUA PORTA 8080 (PÚBLIC)
+
+
+### Inserir nova pessoa
+POST {{ base_url }}/api/pessoas
+Content-Type: application/json
+
+{
+  "nome": "Gabriel",
+  "idade": 28
+}
+
+### Listar todas as pessoas
+GET {{ base_url }}/api/pessoas
+Accept: application/json
+
+### Buscar pessoa por ID
+GET {{ base_url }}/api/pessoas/1
+Accept: application/json
+
+### Atualizar pessoa (PUT)
+PUT {{ base_url }}/api/pessoas/1
+Content-Type: application/json
+
+{
+  "nome": "Rafael Marinho",
+  "idade": 35
+}
+
+### Remover pessoa (DELETE)
+DELETE {{ base_url }}/api/pessoas/1
+Accept: */*
