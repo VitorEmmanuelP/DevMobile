@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -13,7 +13,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ConversationItem } from '../components/ConversationItem';
 import { NewConversationModal } from '../components/NewConversationModal';
 import { StatusIndicator } from '../components/StatusIndicator';
+import { ThemeToggleFab } from '../components/ThemeToggleFab';
 import { conversationRepository } from '../repositories/conversationRepository';
+import { useTheme } from '../theme/ThemeContext';
+import { ThemeColors } from '../theme/theme';
 import { ConnectionStatus, Conversation, CreateConversationInput } from '../types';
 
 interface Props {
@@ -31,6 +34,8 @@ export function ConversationsScreen({
   onSubscribe,
   onUnsubscribe,
 }: Props) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -88,7 +93,7 @@ export function ConversationsScreen({
       </View>
 
       {loading ? (
-        <ActivityIndicator testID="loading" style={styles.loading} />
+        <ActivityIndicator testID="loading" style={styles.loading} color={colors.primary} />
       ) : conversations.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyText}>Nenhuma conversa ainda.</Text>
@@ -117,6 +122,8 @@ export function ConversationsScreen({
         <Text style={styles.fabText}>+ Nova conversa</Text>
       </TouchableOpacity>
 
+      <ThemeToggleFab />
+
       <NewConversationModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -126,60 +133,62 @@ export function ConversationsScreen({
   );
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-  },
-  settingsIcon: {
-    fontSize: 22,
-  },
-  statusBar: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-  },
-  loading: {
-    marginTop: 40,
-  },
-  empty: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
-  },
-  emptyText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#555',
-  },
-  emptyHint: {
-    fontSize: 14,
-    color: '#888',
-    marginTop: 6,
-  },
-  fab: {
-    position: 'absolute',
-    bottom: 24,
-    alignSelf: 'center',
-    backgroundColor: '#0b6e4f',
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-    borderRadius: 28,
-  },
-  fabText: {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 15,
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: 16,
+      paddingTop: 16,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: '700',
+      color: colors.text,
+    },
+    settingsIcon: {
+      fontSize: 22,
+    },
+    statusBar: {
+      paddingHorizontal: 16,
+      paddingVertical: 10,
+    },
+    loading: {
+      marginTop: 40,
+    },
+    empty: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 24,
+    },
+    emptyText: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: colors.textMuted,
+    },
+    emptyHint: {
+      fontSize: 14,
+      color: colors.textFaint,
+      marginTop: 6,
+    },
+    fab: {
+      position: 'absolute',
+      bottom: 24,
+      alignSelf: 'center',
+      backgroundColor: colors.primary,
+      paddingHorizontal: 24,
+      paddingVertical: 14,
+      borderRadius: 28,
+    },
+    fabText: {
+      color: colors.onPrimary,
+      fontWeight: '700',
+      fontSize: 15,
+    },
+  });

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -12,6 +12,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { DEFAULT_BROKER } from '../config';
 import { settingsRepository } from '../repositories/settingsRepository';
+import { useTheme } from '../theme/ThemeContext';
+import { ThemeColors } from '../theme/theme';
 import { Settings } from '../types';
 
 interface Props {
@@ -37,6 +39,8 @@ function validateHost(host: string): string | null {
 }
 
 export function SettingsScreen({ settings, onSaved, onBack }: Props) {
+  const { mode, colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const insets = useSafeAreaInsets();
   const [nickname, setNickname] = useState(settings?.nickname ?? '');
   const [brokerHost, setBrokerHost] = useState(settings?.brokerHost ?? DEFAULT_BROKER.host);
@@ -98,6 +102,8 @@ export function SettingsScreen({ settings, onSaved, onBack }: Props) {
         testID="input-nickname"
         style={styles.input}
         placeholder="Seu apelido"
+        placeholderTextColor={colors.textFaint}
+        keyboardAppearance={mode === 'dark' ? 'dark' : 'light'}
         value={nickname}
         onChangeText={setNickname}
       />
@@ -107,6 +113,8 @@ export function SettingsScreen({ settings, onSaved, onBack }: Props) {
         testID="input-host"
         style={styles.input}
         placeholder="broker.hivemq.com"
+        placeholderTextColor={colors.textFaint}
+        keyboardAppearance={mode === 'dark' ? 'dark' : 'light'}
         autoCapitalize="none"
         autoCorrect={false}
         value={brokerHost}
@@ -118,6 +126,8 @@ export function SettingsScreen({ settings, onSaved, onBack }: Props) {
         testID="input-port"
         style={styles.input}
         placeholder="8884"
+        placeholderTextColor={colors.textFaint}
+        keyboardAppearance={mode === 'dark' ? 'dark' : 'light'}
         keyboardType="number-pad"
         value={brokerPort}
         onChangeText={setBrokerPort}
@@ -152,65 +162,68 @@ export function SettingsScreen({ settings, onSaved, onBack }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  content: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#444',
-    marginBottom: 6,
-  },
-  input: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 16,
-    fontSize: 15,
-  },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  error: {
-    color: '#c62828',
-    marginBottom: 14,
-  },
-  button: {
-    backgroundColor: '#0b6e4f',
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  linkButton: {
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  linkText: {
-    color: '#0b6e4f',
-    fontWeight: '600',
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    content: {
+      padding: 20,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: '700',
+      marginBottom: 20,
+      color: colors.text,
+    },
+    label: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: colors.textMuted,
+      marginBottom: 6,
+    },
+    input: {
+      backgroundColor: colors.surface,
+      color: colors.text,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      marginBottom: 16,
+      fontSize: 15,
+    },
+    switchRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 16,
+    },
+    error: {
+      color: colors.error,
+      marginBottom: 14,
+    },
+    button: {
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      paddingVertical: 14,
+      alignItems: 'center',
+    },
+    buttonDisabled: {
+      opacity: 0.6,
+    },
+    buttonText: {
+      color: colors.onPrimary,
+      fontSize: 16,
+      fontWeight: '700',
+    },
+    linkButton: {
+      paddingVertical: 14,
+      alignItems: 'center',
+    },
+    linkText: {
+      color: colors.primary,
+      fontWeight: '600',
+    },
+  });

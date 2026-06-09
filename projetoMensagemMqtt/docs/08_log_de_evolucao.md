@@ -16,6 +16,8 @@ Formato: Data | Agente | Versão do prompt | Artefato | Validador | Status
 | 2026-06-03 | Humano | — | Runner de teste fixado: Jest (jest-expo) via `npm test`; NUNCA vitest (causa "Unexpected token 'typeof'"). Atualizado docs/06 §5.0, docs/07, roteiro (Etapa 5 + erros comuns) e prompt do Agente QA | Rafael | PRONTO PARA VALIDAÇÃO |
 | 2026-06-03 | Humano | — | RNF08: teclado do celular cobria o TextInput no Chat. ChatScreen passa a usar KeyboardAvoidingView + FlatList (keyboardShouldPersistTaps). Atualizado docs/02 (RNF08), docs/06 (ChatScreen, experiência, validação manual, critérios) e prompt do Agente Front-end | Rafael | PRONTO PARA VALIDAÇÃO |
 | 2026-06-08 | Front-end | v1.0 | Safe area: App.tsx, ChatScreen, ConversationsScreen e SettingsScreen passam a aplicar insets por tela (useSafeAreaInsets) — header sob a status bar e input/FAB/conteúdo acima da barra de navegação | — | PRONTO PARA VALIDAÇÃO |
+| 2026-06-08 | Front-end | v1.0 | Modo escuro: ThemeProvider (Context) + hook useTheme em src/theme; FAB de alternância (ThemeToggleFab) na tela de Conversas; telas e componentes migrados para paleta por tema via createStyles(colors); StatusBar dinâmica. Tema só em memória (useState), sem persistência. StatusIndicator mantém cores de status (semânticas). tsc exit 0 | — | PRONTO PARA VALIDAÇÃO |
+| 2026-06-08 | Front-end | v1.0/v1.1 | Suíte de testes automatizados (docs/06 §5.0): infra Jest/jest-expo (package.json scripts.test + preset + transformIgnorePatterns p/ mqtt; @testing-library/react-native; react-test-renderer@19.1.0; jest.setup.ts; src/test/render.tsx com ThemeProvider+SafeAreaProvider). 10 suites / 59 testes cobrindo §5.1 (StatusIndicator, MessageBubble, Conversas vazia/com itens) e §5.2 (criar/duplicado/RN08, RF11, enviar/RN09, abrir conversa, Ajustes inválidos/RN11, RNF07), + extras: useMqtt (conexão única, eco RN04, RNF07), v1.1 limpar histórico (RN10) e ThemeContext/ThemeToggleFab. `npm test` verde; `npx tsc --noEmit` exit 0. Suíte-base gerada por ferramenta de testes RN e revisada pelo Front-end; testes de tema escritos manualmente. | — | PRONTO PARA VALIDAÇÃO |
 
 > As próximas entradas são preenchidas pelos agentes durante a prática (back-end,
 > front-end, QA) e consolidadas pelo Documentador ao fim do ciclo.
@@ -31,7 +33,8 @@ Formato: Data | Agente | Versão do prompt | Artefato | Validador | Status
 ## 3. Pendências ativas
 | Tag | Agente que abriu | Data | Status |
 |---|---|---|---|
-| — | — | — | — |
+| [PENDENTE] | Front-end | 2026-06-08 | Termos novos "Tema / Modo claro / Modo escuro" usados no código sem entrada no glossário 09 (regra universal 6). Proposta de definição abaixo, aguardando Documentador + validação humana. |
+| [PENDENTE] | Front-end | 2026-06-08 | Feature "Modo escuro" não consta em docs/01/02/06; implementada a pedido humano, visual e só em memória (sem tocar contrato 04 / banco 03). Decidir se vira requisito formal (RF) e se a preferência deve persistir (exigiria Designer de API + Back-end). |
 
 ## 4. Decisões técnicas
 | Decisão | Justificativa | Proponente | Aprovador | Data |

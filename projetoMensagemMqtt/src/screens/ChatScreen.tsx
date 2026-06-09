@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -14,6 +14,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { MessageBubble } from '../components/MessageBubble';
 import { messageRepository } from '../repositories/messageRepository';
+import { useTheme } from '../theme/ThemeContext';
+import { ThemeColors } from '../theme/theme';
 import { Conversation, Message } from '../types';
 
 interface Props {
@@ -24,6 +26,8 @@ interface Props {
 }
 
 export function ChatScreen({ conversation, lastIncoming, onBack, sendMessage }: Props) {
+  const { mode, colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [draft, setDraft] = useState('');
   const listRef = useRef<FlatList<Message>>(null);
@@ -131,6 +135,8 @@ export function ChatScreen({ conversation, lastIncoming, onBack, sendMessage }: 
           testID="input-message"
           style={styles.input}
           placeholder="Mensagem"
+          placeholderTextColor={colors.textFaint}
+          keyboardAppearance={mode === 'dark' ? 'dark' : 'light'}
           value={draft}
           onChangeText={setDraft}
           multiline
@@ -143,64 +149,66 @@ export function ChatScreen({ conversation, lastIncoming, onBack, sendMessage }: 
   );
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#ece5dd',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 12,
-    paddingVertical: 14,
-    backgroundColor: '#0b6e4f',
-  },
-  headerAction: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  title: {
-    flex: 1,
-    textAlign: 'center',
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '700',
-    marginHorizontal: 8,
-  },
-  list: {
-    flex: 1,
-  },
-  listContent: {
-    padding: 12,
-  },
-  inputBar: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    padding: 8,
-    backgroundColor: '#f5f5f5',
-  },
-  input: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    maxHeight: 120,
-    fontSize: 15,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ddd',
-  },
-  sendButton: {
-    marginLeft: 8,
-    backgroundColor: '#0b6e4f',
-    borderRadius: 20,
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-  },
-  sendText: {
-    color: '#fff',
-    fontWeight: '700',
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: colors.chatBackground,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: 12,
+      paddingVertical: 14,
+      backgroundColor: colors.primary,
+    },
+    headerAction: {
+      color: colors.onPrimary,
+      fontSize: 16,
+      fontWeight: '600',
+    },
+    title: {
+      flex: 1,
+      textAlign: 'center',
+      color: colors.onPrimary,
+      fontSize: 18,
+      fontWeight: '700',
+      marginHorizontal: 8,
+    },
+    list: {
+      flex: 1,
+    },
+    listContent: {
+      padding: 12,
+    },
+    inputBar: {
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+      padding: 8,
+      backgroundColor: colors.surfaceMuted,
+    },
+    input: {
+      flex: 1,
+      backgroundColor: colors.surface,
+      color: colors.text,
+      borderRadius: 20,
+      paddingHorizontal: 14,
+      paddingVertical: 10,
+      maxHeight: 120,
+      fontSize: 15,
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: colors.border,
+    },
+    sendButton: {
+      marginLeft: 8,
+      backgroundColor: colors.primary,
+      borderRadius: 20,
+      paddingHorizontal: 18,
+      paddingVertical: 12,
+    },
+    sendText: {
+      color: colors.onPrimary,
+      fontWeight: '700',
+    },
+  });

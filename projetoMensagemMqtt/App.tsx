@@ -1,6 +1,6 @@
 import './src/polyfills';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -10,11 +10,16 @@ import { ChatScreen } from './src/screens/ChatScreen';
 import { ConversationsScreen } from './src/screens/ConversationsScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
 import { settingsRepository } from './src/repositories/settingsRepository';
+import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
+import { ThemeColors } from './src/theme/theme';
 import { Conversation, Settings } from './src/types';
 
 type Screen = 'settings' | 'conversations' | 'chat';
 
-export default function App() {
+function AppContent() {
+  const { mode, colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   const [settings, setSettings] = useState<Settings | null>(null);
   const [loading, setLoading] = useState(true);
   const [screen, setScreen] = useState<Screen>('conversations');
@@ -70,24 +75,33 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <View style={loading ? styles.loading : styles.root}>
-        {loading ? <ActivityIndicator size="large" color="#0b6e4f" /> : renderScreen()}
-        <StatusBar style="auto" />
-      </View>
-    </SafeAreaProvider>
+    <View style={loading ? styles.loading : styles.root}>
+      {loading ? <ActivityIndicator size="large" color={colors.primary} /> : renderScreen()}
+      <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  loading: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-});
+export default function App() {
+  return (
+    <ThemeProvider>
+      <SafeAreaProvider>
+        <AppContent />
+      </SafeAreaProvider>
+    </ThemeProvider>
+  );
+}
+
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    root: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    loading: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.background,
+    },
+  });

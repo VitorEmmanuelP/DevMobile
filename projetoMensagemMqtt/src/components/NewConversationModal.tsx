@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
+import { useTheme } from '../theme/ThemeContext';
+import { ThemeColors } from '../theme/theme';
 import { CreateConversationInput } from '../types';
 
 interface Props {
@@ -23,6 +25,8 @@ function validateTopic(topic: string): string | null {
 }
 
 export function NewConversationModal({ visible, onClose, onCreate }: Props) {
+  const { mode, colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [name, setName] = useState('');
   const [topic, setTopic] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -71,6 +75,8 @@ export function NewConversationModal({ visible, onClose, onCreate }: Props) {
             testID="input-name"
             style={styles.input}
             placeholder="Nome (ex.: Sala 1)"
+            placeholderTextColor={colors.textFaint}
+            keyboardAppearance={mode === 'dark' ? 'dark' : 'light'}
             value={name}
             onChangeText={setName}
           />
@@ -78,6 +84,8 @@ export function NewConversationModal({ visible, onClose, onCreate }: Props) {
             testID="input-topic"
             style={styles.input}
             placeholder="Tópico (ex.: mensagemmqtt/sala1)"
+            placeholderTextColor={colors.textFaint}
+            keyboardAppearance={mode === 'dark' ? 'dark' : 'light'}
             autoCapitalize="none"
             value={topic}
             onChangeText={setTopic}
@@ -103,59 +111,62 @@ export function NewConversationModal({ visible, onClose, onCreate }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    padding: 24,
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 14,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 10,
-    fontSize: 15,
-  },
-  error: {
-    color: '#c62828',
-    marginBottom: 8,
-  },
-  actions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 6,
-  },
-  button: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginLeft: 10,
-  },
-  cancel: {
-    backgroundColor: '#eee',
-  },
-  cancelText: {
-    color: '#333',
-    fontWeight: '600',
-  },
-  create: {
-    backgroundColor: '#0b6e4f',
-  },
-  createText: {
-    color: '#fff',
-    fontWeight: '700',
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    backdrop: {
+      flex: 1,
+      backgroundColor: colors.backdrop,
+      justifyContent: 'center',
+      padding: 24,
+    },
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      padding: 20,
+    },
+    title: {
+      fontSize: 18,
+      fontWeight: '700',
+      marginBottom: 14,
+      color: colors.text,
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: colors.border,
+      color: colors.text,
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      marginBottom: 10,
+      fontSize: 15,
+    },
+    error: {
+      color: colors.error,
+      marginBottom: 8,
+    },
+    actions: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      marginTop: 6,
+    },
+    button: {
+      paddingVertical: 10,
+      paddingHorizontal: 16,
+      borderRadius: 8,
+      marginLeft: 10,
+    },
+    cancel: {
+      backgroundColor: colors.surfaceMuted,
+    },
+    cancelText: {
+      color: colors.text,
+      fontWeight: '600',
+    },
+    create: {
+      backgroundColor: colors.primary,
+    },
+    createText: {
+      color: colors.onPrimary,
+      fontWeight: '700',
+    },
+  });
